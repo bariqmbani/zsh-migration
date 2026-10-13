@@ -22,8 +22,10 @@ fpath+=("$HOME/.zfunc")
 source "$ZSH/oh-my-zsh.sh"
 source "$HOME/.config/zsh-migration/portable-settings.zsh"
 
-# One runtime/tool manager for every development environment.
-(( $+commands[mise] )) && eval "$(mise activate zsh)"
+# Runtime activation applies only to the full development migration.
+if [[ ! -f "$HOME/.config/zsh-migration/scope" ]] || [[ $(<"$HOME/.config/zsh-migration/scope") != shell-only ]]; then
+  (( $+commands[mise] )) && eval "$(mise activate zsh)"
+fi
 source "$HOME/.config/zsh-migration/aliases.zsh"
 [[ -f "$HOME/.zsh-migration-local.zsh" ]] && source "$HOME/.zsh-migration-local.zsh"
 

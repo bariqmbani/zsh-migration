@@ -5,6 +5,7 @@ Validation host: WSL / Ubuntu 24.04, x86_64, Zsh 5.9, Python 3.13, 2026-10-13. N
 ## Automated checks
 
 - Twelve portable tests cover transactions, repeat restore, newest-first rollback, preservation of later edits/history, symlinks, backup/activation failures, real public dry-run/configuration-only restore, archive integrity, sanitized source exclusions, login/non-login startup and terminal widgets.
+- Four shell-only tests cover dry-run, preserved existing mise/runtime configuration, login/non-login startup and scope-aware verification/rollback, fresh installation without mise config, and a missing-Zsh bootstrap stub proving only Zsh is installed.
 - Six platform tests cover OS classification, native Windows rejection, native prerequisite command construction, unknown package managers, failure propagation and platform paths.
 - Ten mise tests cover baseline/tool report consistency, user policy surviving source rediscovery, source default/version/vendor conversion, development installs routed through mise, install failure leaving target config untouched, existing mise config rollback, legacy path cleanup/mise activation, nondefault config location rejection, real mise offline parsing/registry recognition and actual bat/batcat alias behavior for paths with spaces and piped input. The real binary test is optional when MISE_TEST_BINARY is absent; all ten were run on the source validation host.
 - Syntax checks cover maintained Bash/Zsh scripts and Python modules.
@@ -19,6 +20,7 @@ From the repository root (Python >=3.12):
 
 ```sh
 python3 toolkit/tests/test_portable.py /absolute/path/to/generated-package
+python3 toolkit/tests/test_shell_only.py /absolute/path/to/generated-package
 python3 toolkit/tests/test_platform.py
 MISE_TEST_BINARY=/absolute/path/to/mise python3 toolkit/tests/test_mise.py /absolute/path/to/generated-package
 ```

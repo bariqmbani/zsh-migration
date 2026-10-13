@@ -17,6 +17,20 @@ Run as your normal account, without sudo. The wrapper verifies SHA256SUMS before
 
 `--dry-run` makes no changes to HOME or installed packages. `--skip-deps` installs only configuration; it does not claim the development environment is ready. Missing optional shell integrations stay inactive. `verify.zsh` intentionally fails until required tools exist.
 
+## Zsh-only restore
+
+```sh
+bash migrate-zsh.sh --dry-run
+bash migrate-zsh.sh
+zsh -f verify.zsh
+```
+
+The wrapper installs missing Zsh through supported Linux native package managers, then uses the same checksum, backup and rollback workflow to restore Oh My Zsh, Zinit, bundled plugins/completions, theme and shell aliases. Plugin snapshots are already in the package; no remote plugin installer is needed. macOS usually supplies Zsh; other systems need Zsh >=5.8 as described below.
+
+This scope leaves ~/.config/mise/config.toml untouched, does not install development/manual tools, and does not activate mise or rewrite inherited runtime PATH/variables. Developer exports are omitted. `verify.zsh` detects the installed shell-only marker and checks shell/plugins without requiring development tools. Optional existing fzf/zoxide/eza/bat integrations can still load. Existing target startup files are backed up and replaced; any runtime activation in those files is preserved in the backup for deliberate merging afterward.
+
+`--skip-deps` differs: it skips installation while applying the full development configuration. Use `migrate-zsh.sh` for shell-only scope. Rollback works for either scope and includes only that installation's managed paths. The login shell is unchanged.
+
 ## Platform scope
 
 | Target | Installation | Validation |

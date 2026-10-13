@@ -8,7 +8,8 @@ for arg in "$@"; do
   case "$arg" in
     --dry-run) dry_run=1 ;;
     --skip-deps) skip_deps=1 ;;
-    -h|--help) echo 'Usage: bash bootstrap.sh [--dry-run] [--skip-deps]'; exit 0 ;;
+    --shell-only) ;;
+    -h|--help) echo 'Usage: bash bootstrap.sh [--dry-run] [--skip-deps] [--shell-only]'; exit 0 ;;
     *) echo "Unknown option: $arg" >&2; exit 2 ;;
   esac
 done

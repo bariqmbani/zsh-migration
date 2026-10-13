@@ -7,10 +7,16 @@ migration_detect_platform
 migration_checksum "$kit"
 print -r -- "Verifying $MIGRATION_PLATFORM / $MIGRATION_ARCH"
 export MIGRATION_VERIFY_KIT="$kit"
+export MIGRATION_VERIFY_SHELL_ONLY=0
+if [[ -f "$HOME/.config/zsh-migration/scope" ]] && [[ $(<"$HOME/.config/zsh-migration/scope") == shell-only ]]; then
+  export MIGRATION_VERIFY_SHELL_ONLY=1
+  print 'Scope: shell-only; developer and optional CLI tools are not required.'
+fi
 zsh_bin=$(command -v zsh)
 for mode in -ic -lic; do
   "$zsh_bin" "$mode" '
     failures=0
+    if [[ $MIGRATION_VERIFY_SHELL_ONLY != 1 ]]; then
     for tool in git curl perl mise go python node java uv pnpm mvn; do
       if command -v "$tool" >/dev/null; then print "PASS command: $tool"
       else print "FAIL command: $tool"; (( failures++ )); fi
@@ -35,7 +41,10 @@ for mode in -ic -lic; do
     [[ ${aliases[ls]:-} == eza* && ${aliases[l]:-} == eza* && ${aliases[cat]:-} == batcat* ]] || {
       print "FAIL eza/batcat aliases"; (( failures++ ))
     }
-    for fn in _zsh_autosuggest_start _zsh_highlight history-substring-search-up zinit z; do
+    fi
+    required_functions=(_zsh_autosuggest_start _zsh_highlight history-substring-search-up zinit)
+    [[ $MIGRATION_VERIFY_SHELL_ONLY == 1 ]] || required_functions+=(z)
+    for fn in "${required_functions[@]}"; do
       if (( $+functions[$fn] )); then print "PASS function: $fn"
       else print "FAIL function: $fn"; (( failures++ )); fi
     done
@@ -49,7 +58,7 @@ for mode in -ic -lic; do
     for link in "$HOME/.local/share/zinit/completions/_zinit" "$HOME/.local/share/zinit/plugins/_local---zinit/_zinit"; do
       [[ -e $link ]] || { print "FAIL link: $link"; (( failures++ )); }
     done
-    if [[ -o zle && -t 0 ]]; then
+    if [[ -o zle && -t 0 ]] && (( $+commands[fzf] )); then
       (( $+widgets[fzf-history-widget] )) || { print "FAIL fzf widget"; (( failures++ )); }
     else
       print "PENDING fzf widgets: verify from an interactive terminal session."

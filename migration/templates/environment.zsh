@@ -1,3 +1,7 @@
+# Shell-only mode keeps the target runtime environment and PATH as inherited.
+if [[ -f "$HOME/.config/zsh-migration/scope" ]] && [[ $(<"$HOME/.config/zsh-migration/scope") == shell-only ]]; then
+  return 0
+fi
 # Adapt paths to this host. Never import an architecture-specific runtime.
 typeset -U path PATH
 if [[ $OSTYPE == darwin* ]]; then
