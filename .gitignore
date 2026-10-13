@@ -1,0 +1,12 @@
+.DS_Store
+__pycache__/
+*.pyc
+dist/
+.env
+.env.*
+.zsh-migration-secrets.zsh
+.zsh-migration-local.zsh
+.zsh-migration-backups/
+.zsh_history
+.bash_history
+.zsh_sessions/

@@ -1,0 +1,71 @@
+# Portable adaptation. Sanitized source originals are in source-backup.tar.gz.
+source "$HOME/.config/zsh-migration/environment.zsh"
+export ZSH="$HOME/.oh-my-zsh"
+export ZSH_CUSTOM="$ZSH/custom"
+source "$HOME/.config/zsh-migration/profile.zsh"
+# Manager plugins could activate legacy managers before mise.
+for _migration_manager in pyenv nvm sdk sdkman asdf rtx mise fnm rbenv nodenv jenv rvm volta chruby; do
+  plugins=("${(@)plugins:#$_migration_manager}")
+done
+unset _migration_manager
+zstyle ':omz:update' mode disabled
+# Keep generated completion caches within the managed installation.
+ZSH_CACHE_DIR="$ZSH/cache"
+ZSH_COMPDUMP="$ZSH_CACHE_DIR/.zcompdump-${ZSH_VERSION}"
+source "$HOME/.config/zsh-migration/ai-settings.zsh"
+# This private file is never bundled, overwritten, or removed by migration.
+[[ -f "$HOME/.zsh-migration-secrets.zsh" ]] && source "$HOME/.zsh-migration-secrets.zsh"
+# Preserve source plugin order; AI needs a locally configured credential.
+[[ -n ${ZSH_AI_OPENAI_API_KEY:-${OPENAI_API_KEY:-}} ]] || plugins=(${plugins:#zsh-ai})
+# zsh_codex remains installed but disabled, matching the source configuration.
+fpath+=("$HOME/.zfunc")
+source "$ZSH/oh-my-zsh.sh"
+source "$HOME/.config/zsh-migration/portable-settings.zsh"
+
+# One runtime/tool manager for every development environment.
+(( $+commands[mise] )) && eval "$(mise activate zsh)"
+source "$HOME/.config/zsh-migration/aliases.zsh"
+[[ -f "$HOME/.zsh-migration-local.zsh" ]] && source "$HOME/.zsh-migration-local.zsh"
+
+# Native notifications with a text fallback on headless Linux/WSL/BSD.
+alert() {
+  local last_status=$?
+  local message="${*:-Command finished (exit $last_status)}"
+  if [[ $OSTYPE == darwin* ]] && (( $+commands[osascript] )); then
+    command osascript - "$message" <<'APPLESCRIPT'
+on run argv
+  display notification (item 1 of argv) with title "Terminal"
+end run
+APPLESCRIPT
+  elif (( $+commands[notify-send] )) && [[ -n ${DISPLAY:-}${WAYLAND_DISPLAY:-} ]]; then
+    command notify-send 'Terminal' "$message" || print -r -- "$message"
+  else
+    print -r -- "$message"
+  fi
+}
+
+# Load only bundled annexes. Missing directories never trigger a download.
+if [[ -f "$HOME/.local/share/zinit/zinit.git/zinit.zsh" ]]; then
+  zstyle ':zinit:config' home-dir "$HOME/.local/share/zinit"
+  zstyle ':zinit:config' bin-dir "$HOME/.local/share/zinit/zinit.git"
+  source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+  autoload -Uz _zinit
+  (( ${+_comps} )) && _comps[zinit]=_zinit
+  for _migration_annex in as-monitor bin-gem-node patch-dl rust; do
+    if [[ -d "$HOME/.local/share/zinit/plugins/zdharma-continuum---zinit-annex-$_migration_annex" ]]; then
+      zinit light "zdharma-continuum/zinit-annex-$_migration_annex"
+    fi
+  done
+  unset _migration_annex
+fi
+
+source "$HOME/.fzf.zsh"
+(( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
+# Explicit arrow bindings make the installed history widget accessible in the target terminal.
+if [[ -o interactive ]]; then
+  bindkey '^[[A' history-substring-search-up
+  bindkey '^[[B' history-substring-search-down
+  [[ -n ${terminfo[kcuu1]:-} ]] && bindkey "$terminfo[kcuu1]" history-substring-search-up
+  [[ -n ${terminfo[kcud1]:-} ]] && bindkey "$terminfo[kcud1]" history-substring-search-down
+fi
+true

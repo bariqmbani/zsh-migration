@@ -1,0 +1,185 @@
+{
+  "tools": {
+    "go": "1.27.1",
+    "python": "3.13.14",
+    "node": "24.16.0",
+    "java": "temurin-26.0.1",
+    "uv": "0.12.0",
+    "pnpm": "11.9.0",
+    "maven": "latest",
+    "fzf": "0.74.3",
+    "zoxide": "0.10.0",
+    "jq": "1.7",
+    "eza": "latest",
+    "bat": "0.24.0",
+    "npm:@fission-ai/openspec": "1.13.2",
+    "npm:@github/copilot": "1.0.54",
+    "npm:@google/gemini-cli": "0.49.0",
+    "npm:@microsoft/inshellisense": "0.0.1",
+    "npm:@openai/codex": "0.161.0",
+    "npm:agent-browser": "0.33.2",
+    "bun": "1.3.14",
+    "npm:chrome-devtools-mcp": "1.10.1",
+    "deno": "2.9.6",
+    "npm:diff-so-fancy": "1.4.12",
+    "npm:eas-cli": "20.2.0",
+    "npm:opencode-ai": "1.18.34",
+    "npm:pm2": "7.0.3",
+    "npm:sonar-report": "3.1.0",
+    "supabase": "2.118.0",
+    "npm:vite": "8.3.1",
+    "pypi:debugpy": "1.8.21",
+    "pypi:graphifyy": "0.9.67",
+    "ruff": "0.16.0",
+    "pypi:github/spec-kit": "v1.0.13",
+    "ty": "0.0.64",
+    "go:github.com/bojand/ghz/cmd/ghz": "v0.121.0",
+    "go:golang.org/x/tools/cmd/goimports": "v0.48.0",
+    "go:github.com/golangci/golangci-lint/v2/cmd/golangci-lint": "v2.12.2",
+    "go:golang.org/x/tools/gopls": "v0.23.0",
+    "go:github.com/vektra/mockery/v3": "v3.7.0",
+    "go:google.golang.org/protobuf/cmd/protoc-gen-go": "v1.33.0",
+    "go:google.golang.org/grpc/cmd/protoc-gen-go-grpc": "v1.2.0",
+    "go:github.com/mwitkow/go-proto-validators/protoc-gen-govalidators": "v0.3.2",
+    "go:github.com/favadi/protoc-go-inject-tag": "v1.3.0",
+    "gh": "2.102.0",
+    "ripgrep": "15.2.0",
+    "kubectl": "1.35.2",
+    "helm": "3.22.0",
+    "protoc": "21.12",
+    "glow": "3.0.0",
+    "helix": "24.7",
+    "docker-cli": "29.8.2",
+    "rtk": "0.50.0",
+    "github:exercism/cli": "3.5.8",
+    "claude-code": "2.1.296"
+  },
+  "evidence": {
+    "go": "Standalone Go VERSION metadata",
+    "python": "pyenv default resolved against installed versions",
+    "node": "NVM default resolved against installed versions",
+    "java": "SDKMAN current symlink",
+    "uv": "Source CLI version probe",
+    "pnpm": "Global Node package.json (CLI package)",
+    "maven": "Requested baseline; latest where source has no resolved version",
+    "fzf": "Source CLI version probe",
+    "zoxide": "Source CLI version probe",
+    "jq": "Source CLI version probe",
+    "eza": "Requested baseline; latest where source has no resolved version",
+    "bat": "Source CLI version probe",
+    "npm:@fission-ai/openspec": "Global Node package.json (CLI package)",
+    "npm:@github/copilot": "Global Node package.json (CLI package)",
+    "npm:@google/gemini-cli": "Global Node package.json (CLI package)",
+    "npm:@microsoft/inshellisense": "Global Node package.json (CLI package)",
+    "npm:@openai/codex": "Global Node package.json (CLI package)",
+    "npm:agent-browser": "Global Node package.json (CLI package)",
+    "bun": "Global Node package.json (CLI package)",
+    "npm:chrome-devtools-mcp": "Global Node package.json (CLI package)",
+    "deno": "Global Node package.json (CLI package)",
+    "npm:diff-so-fancy": "Global Node package.json (CLI package)",
+    "npm:eas-cli": "Global Node package.json (CLI package)",
+    "npm:opencode-ai": "Global Node package.json (CLI package)",
+    "npm:pm2": "Global Node package.json (CLI package)",
+    "npm:sonar-report": "Global Node package.json (CLI package)",
+    "supabase": "Global Node package.json (CLI package)",
+    "npm:vite": "Global Node package.json (CLI package)",
+    "pypi:debugpy": "uv tool receipt and distribution METADATA",
+    "pypi:graphifyy": "uv tool receipt and distribution METADATA",
+    "ruff": "uv tool receipt and distribution METADATA",
+    "pypi:github/spec-kit": "uv Git receipt pinned tag",
+    "ty": "uv tool receipt and distribution METADATA",
+    "go:github.com/bojand/ghz/cmd/ghz": "Go build metadata (binary was not executed)",
+    "go:golang.org/x/tools/cmd/goimports": "Go build metadata (binary was not executed)",
+    "go:github.com/golangci/golangci-lint/v2/cmd/golangci-lint": "Go build metadata (binary was not executed)",
+    "go:golang.org/x/tools/gopls": "Go build metadata (binary was not executed)",
+    "go:github.com/vektra/mockery/v3": "Go build metadata (binary was not executed)",
+    "go:google.golang.org/protobuf/cmd/protoc-gen-go": "Go build metadata (binary was not executed)",
+    "go:google.golang.org/grpc/cmd/protoc-gen-go-grpc": "Go build metadata (binary was not executed)",
+    "go:github.com/mwitkow/go-proto-validators/protoc-gen-govalidators": "Go build metadata (binary was not executed)",
+    "go:github.com/favadi/protoc-go-inject-tag": "Go build metadata (binary was not executed)",
+    "gh": "Source CLI version probe",
+    "ripgrep": "Source CLI version probe",
+    "kubectl": "Source CLI version probe",
+    "helm": "Source CLI version probe",
+    "protoc": "Source CLI version probe; protobuf 3.21.x maps to release 21.x",
+    "glow": "Source CLI version probe",
+    "helix": "Source CLI version probe",
+    "docker-cli": "Source CLI version probe",
+    "rtk": "Source CLI version probe",
+    "github:exercism/cli": "Source CLI version probe",
+    "claude-code": "Claude native installation symlink"
+  },
+  "deferred": [
+    {
+      "tool": "corepack",
+      "version": "0.35.0",
+      "reason": "npm bundled with mise Node; corepack replaced by mise pnpm"
+    },
+    {
+      "tool": "npm",
+      "version": "11.13.0",
+      "reason": "npm bundled with mise Node; corepack replaced by mise pnpm"
+    },
+    {
+      "tool": "nds-be-golang-base-v2",
+      "version": "v1.0.3",
+      "reason": "Private/non-allowlisted Go module needs target authentication",
+      "mise_tool": "go:bitbucket.bri.co.id/nds/nds-be-golang-base-v2"
+    },
+    {
+      "tool": "nds-review",
+      "version": "v1.0.21",
+      "reason": "Private/non-allowlisted Go module needs target authentication",
+      "mise_tool": "go:bitbucket.bri.co.id/nds/nds-ast-reviewer-backend/cmd/nds-review"
+    },
+    {
+      "tool": "agy",
+      "reason": "Custom/platform application: choose mise backend on target; executable not copied"
+    },
+    {
+      "tool": "birdears",
+      "reason": "Custom/platform application: choose mise backend on target; executable not copied"
+    },
+    {
+      "tool": "go-upgrade",
+      "reason": "Legacy Go updater replaced by mise upgrade go"
+    },
+    {
+      "tool": "herdr",
+      "reason": "Custom/platform application: choose mise backend on target; executable not copied"
+    },
+    {
+      "tool": "kiro-cli",
+      "reason": "Custom/platform application: choose mise backend on target; executable not copied"
+    },
+    {
+      "tool": "kiro-cli-chat",
+      "reason": "Custom/platform application: choose mise backend on target; executable not copied"
+    },
+    {
+      "tool": "kiro-cli-term",
+      "reason": "Custom/platform application: choose mise backend on target; executable not copied"
+    },
+    {
+      "tool": "nds-revertver",
+      "reason": "Custom/platform application: choose mise backend on target; executable not copied"
+    },
+    {
+      "tool": "nds-upver",
+      "reason": "Custom/platform application: choose mise backend on target; executable not copied"
+    },
+    {
+      "tool": "stockfish",
+      "reason": "Custom/platform application: choose mise backend on target; executable not copied"
+    },
+    {
+      "tool": "terminal-browser",
+      "reason": "Custom/platform application: choose mise backend on target; executable not copied"
+    },
+    {
+      "tool": "upgrade-go",
+      "reason": "Legacy Go updater replaced by mise upgrade go"
+    }
+  ],
+  "policy": "All development tools/environments are installed through mise; native packages only for bootstrap and unavoidable system dependencies."
+}

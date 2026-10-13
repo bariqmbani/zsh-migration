@@ -1,0 +1,10 @@
+{
+  "theme": "robbyrussell",
+  "plugins": [
+    "git",
+    "zsh-autosuggestions",
+    "zsh-syntax-highlighting",
+    "zsh-ai",
+    "zsh-history-substring-search"
+  ]
+}

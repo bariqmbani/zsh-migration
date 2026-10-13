@@ -1,0 +1,12 @@
+.zshenv
+.zprofile
+.zshrc
+.zlogin
+.zlogout
+.fzf.zsh
+.oh-my-zsh
+.local/share/zinit
+.config/zsh-migration
+.config/zsh_codex.ini
+.config/mise/config.toml
+.zfunc/_takar

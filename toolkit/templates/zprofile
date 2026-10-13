@@ -1,0 +1,2 @@
+# Homebrew and optional development tools; shared with non-login shells.
+source "$HOME/.config/zsh-migration/environment.zsh"
