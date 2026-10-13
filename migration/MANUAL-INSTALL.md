@@ -73,4 +73,3 @@ For an existing installation, use `uv tool upgrade graphifyy` with the same UV_T
 Open a fresh terminal after installation so commands, fzf/zoxide integration and eza/bat aliases are detected. Run `zsh -f verify.zsh` from the package directory. It checks manual executable presence and selected mise tools separately; presence alone does not establish freshness. Record installed manual versions against their latest stable upstream releases. yq's `--version` output must identify Mike Farah yq.
 
 On a target that used an earlier migration package, back up existing mise configuration, remove manual/excluded entries from other global/project configurations too, and check command resolution. Older installed mise binaries/shims may remain for rollback; ensure manual commands resolve to their new native installations. Do not delete tools already installed on a target without reviewing them. Removed migration tools are neither installed nor required by this package.
-

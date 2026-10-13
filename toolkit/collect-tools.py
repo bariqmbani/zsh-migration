@@ -175,5 +175,5 @@ def write(home, config, package):
     for key, entry in report['manual_tools'].items():
         manual_doc.append('| ' + key + ' | ' + ', '.join(entry['commands']) + ' | ' + entry['macos'] + ' | [Official source](' + entry['upstream'] + ') |')
     manual_doc.extend(['', (Path(__file__).parent / 'templates/manual-install-notes.md').read_text()])
-    (package / 'MANUAL-INSTALL.md').write_text('\n'.join(manual_doc) + '\n')
+    (package / 'MANUAL-INSTALL.md').write_text('\n'.join(manual_doc).rstrip() + '\n')
     return report
