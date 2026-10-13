@@ -1,19 +1,21 @@
 # Zsh and development environment migration
 
-Migrate this WSL shell profile to **macOS, Linux, or WSL**, with **mise managing all development runtimes and tools**. Includes a sanitized source backup, portable plugins/configuration, ZIP, restore/rollback scripts, and an agent handoff. BSD configuration-only restore is experimental.
+Migrate this WSL shell profile to **macOS, Linux, or WSL**, with **mise managing the selected runtimes and tools**. Includes a sanitized source backup, portable plugins/configuration, ZIP, restore/rollback scripts, and an agent handoff. BSD configuration-only restore is experimental.
 
 ```sh
 gh repo clone bariqmbani/zsh-migration
 cd zsh-migration/migration
 bash bootstrap.sh --dry-run
 bash bootstrap.sh
+# Complete MANUAL-INSTALL.md, then open a fresh terminal.
 zsh -f verify.zsh
 ```
 
-Read [the target handoff](migration/TARGET-AGENT-HANDOFF.md) first. Default restore installs Go, Python, Node.js, Java, uv, pnpm, Maven, eza, bat, and the captured development CLIs through mise, then activates the backed-up shell configuration. `--skip-deps` explicitly selects configuration-only restore. Use a normal user account.
+Read [the target handoff](migration/TARGET-AGENT-HANDOFF.md) first. Default restore installs the 17 selected mise tools, then activates the backed-up shell configuration. Install the 19 manual tools at their latest stable version using [MANUAL-INSTALL.md](migration/MANUAL-INSTALL.md), including eza, bat, rtk and yq. The 18 category 2 tools are excluded. Category 3 pins are preserved; uv, ruff and ty use `latest`. `--skip-deps` explicitly selects configuration-only restore. Use a normal user account.
 
 - `ls`/`l` use eza; `cat` uses batcat (portable wrapper for bat). Includes `ll`, `la`, `lt`, `catn` and `catp`.
 - [Complete instructions and platform support](migration/README.md)
+- [Manual installation](migration/MANUAL-INSTALL.md) and [authoritative tool policy](toolkit/tool-policy.json)
 - [Tool versions](migration/mise-tools.toml) and [discovery evidence/deferred tools](migration/development-tools.json)
 - [Validation and limitations](migration/VALIDATION.md)
 - [ZIP and SHA-256 sidecar](archives/)
@@ -33,4 +35,4 @@ Tests require Python >=3.12. Review generated inventory/exclusions, replace `mig
 
 Paste this single prompt into your agent on the Mac or another target:
 
-> Clone the private repository bariqmbani/zsh-migration using gh. Read AGENTS.md, README.md, migration/TARGET-AGENT-HANDOFF.md, migration/README.md and migration/VALIDATION.md. Inspect this machine, verify checksums, dry-run, then restore the shell and development environment with backups. Use mise for ALL development runtimes/tools/environments, including Go, Python, Node.js, Java, uv, pnpm, Maven, eza and bat; enable the eza ls/l and batcat cat aliases; replace legacy manager activation. You are authorized to install prerequisites and mise tools and replace managed configuration after backing it up. Preserve credentials/history and legacy installations for rollback. On my M1 Pro Mac use native ARM64, detect the actual macOS version, and do not assume a marketing name. Complete verification without contacting AI providers, handle deferred tools through mise where authentication/platform support allows, and report actual results, remaining blockers, backup location and exact rollback command.
+> Clone the private repository bariqmbani/zsh-migration using gh. Read AGENTS.md, README.md and migration/TARGET-AGENT-HANDOFF.md, README.md, MANUAL-INSTALL.md and VALIDATION.md. Inspect the target, verify checksums, dry-run and restore with backups. Follow tool-policy.json: category 1 tools are installed manually at latest stable outside mise (including rtk and Mike Farah yq), category 2 tools are excluded, category 3 pins remain unchanged, and uv/ruff/ty use latest through mise. Replace legacy runtime activation and preserve the eza ls/l and batcat cat aliases. You are authorized to install prerequisites, the selected mise tools and manual tools, and replace managed configuration after backups. Preserve credentials/history and legacy installations for rollback. On my M1 Pro Mac use native ARM64 and detect the actual macOS version. Complete verification without AI-provider requests; report tool versions, unresolved items, backup location and the exact rollback command.

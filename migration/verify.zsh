@@ -6,20 +6,32 @@ source "$kit/lib/platform.zsh"
 migration_detect_platform
 migration_checksum "$kit"
 print -r -- "Verifying $MIGRATION_PLATFORM / $MIGRATION_ARCH"
+export MIGRATION_VERIFY_KIT="$kit"
 zsh_bin=$(command -v zsh)
 for mode in -ic -lic; do
   "$zsh_bin" "$mode" '
     failures=0
-    for tool in git fzf zoxide jq curl perl mise go python node java uv pnpm mvn eza bat; do
+    for tool in git curl perl mise go python node java uv pnpm mvn; do
       if command -v "$tool" >/dev/null; then print "PASS command: $tool"
       else print "FAIL command: $tool"; (( failures++ )); fi
     done
     if command -v mise >/dev/null; then
-      for tool in go python node java uv pnpm mvn eza bat; do
+      for tool in go python node java uv pnpm mvn; do
         mise which "$tool" >/dev/null || { print "FAIL mise ownership: $tool"; (( failures++ )); }
       done
-      [[ -z $(mise ls --missing) ]] || { print "FAIL missing mise tools"; (( failures++ )); }
+      missing=$(mise ls --missing) || { print "FAIL mise listing"; (( failures++ )); }
+      [[ -z $missing ]] || { print "FAIL missing mise tools: $missing"; (( failures++ )); }
     fi
+    # Manual tools require executable presence, not mise ownership.
+    while IFS= read -r spec; do
+      candidates=("${(@s:|:)spec}")
+      found=""
+      for candidate in "${candidates[@]}"; do
+        if (( $+commands[$candidate] )); then found=$commands[$candidate]; break; fi
+      done
+      if [[ -n $found ]]; then print "PASS manual command: $spec ($found)"
+      else print "PENDING manual installation: $spec (MANUAL-INSTALL.md)"; (( failures++ )); fi
+    done < "$MIGRATION_VERIFY_KIT/manual-commands.txt"
     [[ ${aliases[ls]:-} == eza* && ${aliases[l]:-} == eza* && ${aliases[cat]:-} == batcat* ]] || {
       print "FAIL eza/batcat aliases"; (( failures++ ))
     }

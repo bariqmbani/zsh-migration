@@ -1,0 +1,173 @@
+{
+  "bat": {
+    "version": "latest",
+    "commands": [
+      "bat",
+      "batcat"
+    ],
+    "upstream": "https://github.com/sharkdp/bat",
+    "macos": "brew install bat",
+    "source_version": "0.24.0"
+  },
+  "claude-code": {
+    "version": "latest",
+    "commands": [
+      "claude"
+    ],
+    "upstream": "https://github.com/anthropics/claude-code",
+    "macos": "Official native installer; select latest stable",
+    "source_version": "2.1.296"
+  },
+  "docker-cli": {
+    "version": "latest",
+    "commands": [
+      "docker"
+    ],
+    "upstream": "https://docs.docker.com/engine/install/",
+    "macos": "brew install docker (CLI only; plan an engine separately)",
+    "source_version": "29.8.2"
+  },
+  "eza": {
+    "version": "latest",
+    "commands": [
+      "eza"
+    ],
+    "upstream": "https://github.com/eza-community/eza",
+    "macos": "brew install eza",
+    "source_version": "latest"
+  },
+  "fzf": {
+    "version": "latest",
+    "commands": [
+      "fzf"
+    ],
+    "upstream": "https://github.com/junegunn/fzf",
+    "macos": "brew install fzf",
+    "source_version": "0.74.3"
+  },
+  "gh": {
+    "version": "latest",
+    "commands": [
+      "gh"
+    ],
+    "upstream": "https://cli.github.com/",
+    "macos": "brew install gh",
+    "source_version": "2.102.0"
+  },
+  "glow": {
+    "version": "latest",
+    "commands": [
+      "glow"
+    ],
+    "upstream": "https://github.com/charmbracelet/glow",
+    "macos": "brew install glow",
+    "source_version": "3.0.0"
+  },
+  "go:github.com/bojand/ghz/cmd/ghz": {
+    "version": "latest",
+    "commands": [
+      "ghz"
+    ],
+    "upstream": "https://github.com/bojand/ghz",
+    "macos": "Go install module@latest into ~/.local/bin",
+    "source_version": "v0.121.0"
+  },
+  "go:golang.org/x/tools/cmd/goimports": {
+    "version": "latest",
+    "commands": [
+      "goimports"
+    ],
+    "upstream": "https://pkg.go.dev/golang.org/x/tools/cmd/goimports",
+    "macos": "Go install module@latest into ~/.local/bin",
+    "source_version": "v0.48.0"
+  },
+  "go:golang.org/x/tools/gopls": {
+    "version": "latest",
+    "commands": [
+      "gopls"
+    ],
+    "upstream": "https://go.dev/gopls/",
+    "macos": "Go install module@latest into ~/.local/bin",
+    "source_version": "v0.23.0"
+  },
+  "helm": {
+    "version": "latest",
+    "commands": [
+      "helm"
+    ],
+    "upstream": "https://helm.sh/docs/intro/install/",
+    "macos": "brew install helm",
+    "source_version": "3.22.0"
+  },
+  "jq": {
+    "version": "latest",
+    "commands": [
+      "jq"
+    ],
+    "upstream": "https://jqlang.org/download/",
+    "macos": "brew install jq",
+    "source_version": "1.7"
+  },
+  "kubectl": {
+    "version": "latest",
+    "commands": [
+      "kubectl"
+    ],
+    "upstream": "https://kubernetes.io/docs/tasks/tools/",
+    "macos": "brew install kubernetes-cli",
+    "source_version": "1.35.2"
+  },
+  "npm:@openai/codex": {
+    "version": "latest",
+    "commands": [
+      "codex"
+    ],
+    "upstream": "https://github.com/openai/codex",
+    "macos": "Official standalone installer or brew install --cask codex",
+    "source_version": "0.161.0"
+  },
+  "pypi:graphifyy": {
+    "version": "latest",
+    "commands": [
+      "graphify"
+    ],
+    "upstream": "https://pypi.org/project/graphifyy/",
+    "macos": "Manual uv tool install/upgrade graphifyy using mise-managed Python",
+    "source_version": "0.9.67"
+  },
+  "ripgrep": {
+    "version": "latest",
+    "commands": [
+      "rg"
+    ],
+    "upstream": "https://github.com/BurntSushi/ripgrep",
+    "macos": "brew install ripgrep",
+    "source_version": "15.2.0"
+  },
+  "rtk": {
+    "version": "latest",
+    "commands": [
+      "rtk"
+    ],
+    "upstream": "https://github.com/rtk-ai/rtk",
+    "macos": "brew install rtk",
+    "source_version": "0.50.0"
+  },
+  "zoxide": {
+    "version": "latest",
+    "commands": [
+      "zoxide"
+    ],
+    "upstream": "https://github.com/ajeetdsouza/zoxide",
+    "macos": "brew install zoxide",
+    "source_version": "0.10.0"
+  },
+  "yq": {
+    "version": "latest",
+    "commands": [
+      "yq"
+    ],
+    "upstream": "https://github.com/mikefarah/yq",
+    "macos": "brew install yq (Mike Farah yq)"
+  }
+}

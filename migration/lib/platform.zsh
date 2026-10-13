@@ -118,7 +118,7 @@ migration_install_mise_tools() {
     mise_bin="$HOME/.local/bin/mise"
   fi
   [[ -x $mise_bin ]] || return 1
-  print 'Installing development runtimes and CLI tools with mise (see mise-tools.toml).'
+  print 'Installing the selected development runtimes and CLI tools with mise (see mise-tools.toml).'
   (
     # Stay outside projects and isolate config resolution. Existing target mise config
     # is replaced by the filesystem transaction only AFTER every tool install succeeds.

@@ -38,7 +38,8 @@ migration_package_manager
 migration_missing_dependencies
 print -r -- "Package manager: $MIGRATION_MANAGER"
 print -r -- "Missing dependencies: ${MIGRATION_MISSING[*]:-none}"
-print 'Development tools: mise-tools.toml (installed through mise by default)'
+print 'Mise tools: mise-tools.toml (installed by default)'
+print 'Manual tools: MANUAL-INSTALL.md (install latest stable on target; includes yq)'
 print 'Managed destinations (existing entries will be backed up):'
 cat "$kit/managed-paths.txt"
 if (( dry_run )); then
@@ -55,6 +56,6 @@ if ! migration_apply "$stage" "$kit/managed-paths.txt"; then
   [[ -z ${MIGRATION_BACKUP:-} ]] || print -ru2 -- "Recover: zsh -f ${(q)kit}/rollback.zsh ${(q)MIGRATION_BACKUP}"
   exit 1
 fi
-print 'Installed. Run zsh -f verify.zsh, then open a NEW terminal.'
+print 'Configuration installed. Complete MANUAL-INSTALL.md, open a NEW terminal, then run zsh -f verify.zsh.'
 print 'AI needs a local key in ~/.zsh-migration-secrets.zsh. Existing target history is preserved.'
 print 'The login shell is unchanged; use zsh interactively or configure it separately.'

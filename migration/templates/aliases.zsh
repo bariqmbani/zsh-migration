@@ -8,8 +8,8 @@ if (( $+commands[eza] )); then
   alias lt='eza --tree --level=2 --group-directories-first'
 fi
 
-# mise provides `bat`; Debian also uses the executable name `batcat`.
-# Prefer the mise-managed bat when both commands exist.
+# Upstream bat provides `bat`; Debian also uses the executable name `batcat`.
+# Prefer upstream bat when both commands exist.
 if (( $+commands[bat] )); then
   function batcat { command bat "$@"; }
 fi

@@ -136,17 +136,44 @@ def collect(home):
                       else 'Custom/platform application: choose mise backend on target; executable not copied')
             deferred.append({'tool': binary.name, 'reason': reason})
     return {'tools': tools, 'evidence': evidence, 'deferred': deferred,
-            'policy': 'All development tools/environments are installed through mise; native packages only for bootstrap and unavoidable system dependencies.'}
+            'policy': 'Unfiltered source discovery; apply the explicit user policy before installing anything.'}
+
+
+def apply_policy(discovered):
+    policy = json.loads((Path(__file__).parent / 'tool-policy.json').read_text())
+    managed = policy['mise']
+    manual = {key: dict(value) for key, value in policy['manual'].items()}
+    source_tools = discovered['tools']
+    selected = set(managed) | set(manual)
+    for key, entry in manual.items():
+        if key in source_tools:
+            entry['source_version'] = source_tools[key]
+    evidence = {key: discovered['evidence'].get(key, 'User-selected tool') for key in selected}
+    deferred = [entry for entry in discovered['deferred']
+                if entry.get('mise_tool', entry.get('tool')) not in policy['excluded']]
+    for key in sorted(set(source_tools) - selected - set(policy['excluded'])):
+        deferred.append({'tool': key, 'reason': 'Unclassified discovery; requires explicit user review before installation'})
+    return {'tools': managed, 'manual_tools': manual, 'evidence': evidence, 'deferred': deferred,
+            'policy': 'User tool-policy.json: selected mise pins/latest, manual latest tools, and excluded tools. Discovery never overrides these choices.'}
 
 
 def write(home, config, package):
-    report = collect(home)
+    report = apply_policy(collect(home))
     config.parent.mkdir(parents=True, exist_ok=True)
-    lines = ['# Generated source tool versions. Edit intentionally for the target.', '[settings]',
+    lines = ['# User-selected mise tools. Manual tools are listed in MANUAL-INSTALL.md.', '[settings]',
              'auto_install = false', 'idiomatic_version_file_enable_tools = ["node", "python", "java"]', '', '[tools]']
     for tool, version in sorted(report['tools'].items()):
         lines.append(json.dumps(tool) + ' = ' + json.dumps(version))
     config.write_text('\n'.join(lines) + '\n')
     shutil.copy2(config, package / 'mise-tools.toml')
     (package / 'development-tools.json').write_text(json.dumps(report, indent=2) + '\n')
+    (package / 'manual-tools.json').write_text(json.dumps(report['manual_tools'], indent=2) + '\n')
+    (package / 'manual-commands.txt').write_text('\n'.join('|'.join(entry['commands']) for entry in report['manual_tools'].values()) + '\n')
+    manual_doc = ['# Manual installation: latest stable versions', '',
+                  'These 19 tools are intentionally outside mise. Restore does not install them. Install them manually on the target using the latest stable upstream release, then open a new terminal and run verify.zsh. The source version recorded in manual-tools.json is historical evidence, not an installation pin.', '',
+                  '| Tool | Command | macOS installation | Upstream |', '| --- | --- | --- | --- |']
+    for key, entry in report['manual_tools'].items():
+        manual_doc.append('| ' + key + ' | ' + ', '.join(entry['commands']) + ' | ' + entry['macos'] + ' | [Official source](' + entry['upstream'] + ') |')
+    manual_doc.extend(['', (Path(__file__).parent / 'templates/manual-install-notes.md').read_text()])
+    (package / 'MANUAL-INSTALL.md').write_text('\n'.join(manual_doc) + '\n')
     return report

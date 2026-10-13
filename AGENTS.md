@@ -1,10 +1,10 @@
 # Migration maintenance and target policy
 
-- Use **mise for every development runtime, tool and environment**: Go, Python, Node.js, Java, uv, pnpm, Maven, eza, bat, and additional tools. Use registry entries or mise npm/pypi/go/cargo backends. Do not reinstall pyenv, nvm, SDKMAN, asdf, fnm, volta, or another competing manager.
-- Preserve the requested interactive aliases: ls/l through eza and cat through batcat, with a batcat wrapper for mise-managed bat on macOS.
-- For project environments, use project mise.toml and mise-managed uv/pnpm/etc. Package dependencies remain in project lockfiles; do not turn every library into a global tool.
-- Native packages are limited to bootstrapping Zsh/mise (Git, curl, certificates, archive/checksum utilities) and unavoidable system libraries/compiler infrastructure. Never silently fall back to brew/apt/npm -g/uv tool install for development tools that should be mise-managed. Report unsupported tools and find an appropriate mise backend.
-- Preserve target credentials/history and back up existing configuration. Do not delete legacy manager installations; rollback may need them.
-- Read migration/TARGET-AGENT-HANDOFF.md before restoring. Do not claim Mac validation from WSL tests.
-- Edit toolkit/ source; regenerate migration/ and archives/ together. Never hand-edit checksummed files without rebuilding their checksums/package.
+- The user's classifications in toolkit/tool-policy.json are authoritative. Install only its 17 mise entries through mise, preserving category 3 versions and using latest for uv, ruff and ty (category 4). New discoveries require review.
+- Install the 19 category 1 tools manually at their latest stable upstream version, including yq and rtk. Follow migration/MANUAL-INSTALL.md; never put these tools back into mise. Native packages, upstream binaries/installers and direct Go/uv application installs are allowed for these exceptions.
+- Category 2 tools are excluded from active migration installation and verification. Keep the exclusion policy so future source backups do not reintroduce them. Do not uninstall existing target software as a side effect of restoring configuration.
+- Use mise for selected development runtimes/project environments. Do not reinstall pyenv, nvm, SDKMAN, asdf, fnm, volta or another competing runtime manager. Project dependencies stay in their lockfiles.
+- Preserve ls/l aliases through manually installed eza and cat aliases through batcat, with a wrapper for upstream bat on macOS.
+- Preserve target credentials/history, back up existing configuration and keep legacy installations for rollback. Read migration/TARGET-AGENT-HANDOFF.md before restoring. Do not claim Mac validation from WSL tests.
+- Edit toolkit/ source and regenerate migration/ and archives/ together. Replace the obsolete current ZIP so its earlier tool selection is not presented as the active package.
 - Commit identity: Bariq Mbani <bariq.m70@gmail.com>. Keep this repository private.

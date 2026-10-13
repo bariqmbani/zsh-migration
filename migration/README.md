@@ -1,6 +1,6 @@
 # Restore the shell and development environment
 
-This package adapts a WSL Oh My Zsh/Zinit profile to macOS, Linux and WSL. All development runtimes and tools are installed through **mise**. The source machine is never modified by the builder.
+This package adapts a WSL Oh My Zsh/Zinit profile to macOS, Linux and WSL. The selected runtimes and tools use **mise**; user-selected CLI tools are installed manually at their latest stable versions. The source machine is never modified by the builder.
 
 ## Restore
 
@@ -9,6 +9,7 @@ From the extracted ZIP directory or repository `migration/` directory:
 ```sh
 bash bootstrap.sh --dry-run
 bash bootstrap.sh
+# Complete MANUAL-INSTALL.md, then open a fresh terminal.
 zsh -f verify.zsh
 ```
 
@@ -27,26 +28,31 @@ Run as your normal account, without sudo. The wrapper verifies SHA256SUMS before
 
 M1 Pro must report `arm64` in a native terminal. The script rejects Rosetta. The target agent must record `sw_vers`; the user's “Golden Gate 27” label is not a compatibility check. Tool vendors may not publish every captured version for every OS/architecture. Inspect and deliberately adapt versions through mise if necessary; no automatic fallback to old managers.
 
-Zsh >=5.8 is required. A minimal target needs Bash, tar/gzip, curl, trusted CA certificates and either sha256sum or shasum before bootstrap. Git and Perl are shell/bootstrap dependencies. Native package managers may supply those prerequisites and necessary system libraries/compiler infrastructure. On a Mac, finish Command Line Tools installation if prompted. All development tools go through mise, including shell CLIs fzf/zoxide/jq.
+Zsh >=5.8 is required. A minimal target needs Bash, tar/gzip, curl, trusted CA certificates and either sha256sum or shasum before bootstrap. Git and Perl are shell/bootstrap dependencies. Native package managers may supply those prerequisites and necessary system libraries/compiler infrastructure. On a Mac, finish Command Line Tools installation if prompted. The selected mise tools are installed automatically. Shell CLIs fzf/zoxide/jq/eza/bat and the other manual tools are installed separately using MANUAL-INSTALL.md.
 
 ## mise policy and versions
 
-`mise-tools.toml` is the readable copy of the active payload's `~/.config/mise/config.toml`. `development-tools.json` records source evidence and deferred items. Captured default runtime versions replace pyenv, NVM, SDKMAN and standalone Go. Maven defaults to `latest` when absent on the source. The same rule applies to missing requested baseline tools; these selectors resolve at target install time and are not a reproducibility lock.
+`mise-tools.toml` is the readable copy of the active payload's `~/.config/mise/config.toml`. `tool-policy.json` is authoritative; source discovery cannot override the user's classification. `development-tools.json` contains selected tool evidence and unclassified/deferred items. `manual-tools.json` and MANUAL-INSTALL.md describe manual installations.
 
-Global Node CLIs use mise's npm backend; Python tools use its pypi backend (powered by mise-managed uv/Python); public Go tools use its go backend. Node supplies npm. mise manages pnpm directly instead of Corepack. Private Go tools require target authentication and an explicit mise backend entry; see the deferred list. No credentials or private network/TLS bypass settings are activated.
+- **Category 1:** 19 manual tools, always latest stable and outside mise, including yq. Native package managers, official release binaries/installers and direct Go/uv application installs are allowed for these specific exceptions.
+- **Category 2:** 18 excluded tools. They are absent from active tool lists and installation/verification requirements. A denylist prevents rediscovery from adding them back. Restore does not uninstall software already present on the target.
+- **Category 3:** preserve the exact user-approved mise selections, including the existing Maven `latest` selector.
+- **Category 4:** uv, ruff and ty use `latest` through mise.
 
-For any additional development tool, choose its mise registry entry or backend:
+There are 17 active mise entries. These include Go, Python, Node.js, Java, Bun, Deno, pnpm, Maven, protoc and the retained Go code-generation tools. `latest` resolves at target install time; this is not a reproducibility lock. Changing a category 3 pin requires a deliberate recorded decision. Source evidence can record an older version of a manual tool; that is not an installation pin.
+
+Read [MANUAL-INSTALL.md](MANUAL-INSTALL.md) for macOS/Linux instructions. The restore script never installs manual tools or reintroduces excluded tools. Directly built manual Go tools use mise-managed Go; graphifyy uses mise-managed uv/Python for an isolated application environment. They remain outside mise's tool registry. Node supplies npm; pnpm is managed directly by mise. For unclassified future discoveries, review and classify them before adding an installer. Private Go tools require target authentication and review; they are deferred rather than installed automatically.
+
+Use project mise.toml for per-project runtime selection and mise-managed uv/pnpm for environments/dependencies:
 
 ```sh
-mise use --global go@latest python@latest node@lts java@latest uv@latest pnpm@latest maven@latest
-mise use --global 'npm:typescript@latest' 'pypi:poetry@latest'
-# Inside a project, omit --global and commit its mise.toml:
+# Inside a project; these examples create project configuration.
 mise use python@3.13 node@24
 mise exec -- uv venv
 mise exec -- pnpm install
 ```
 
-These are examples, not commands needed after restore; running them changes selected versions. Use mise-managed tools to create project environments and install project dependencies. Do not introduce another global version manager or install dev CLIs directly with brew/apt/npm -g/uv tool install. Docker engines, OS services, GUI applications, Apple SDKs and Android system images need separate target planning; record any unavoidable native prerequisites instead of pretending a CLI download sets up a whole service. Use mise for their CLI/tool components where supported.
+Docker engines, OS services, GUI applications, Apple SDKs and Android system images need separate target planning. The manual Docker entry installs its CLI; it does not establish a working engine. No credentials or private network/TLS bypass settings are activated.
 
 The generated shell removes known inherited legacy manager paths/variables, disables their Oh My Zsh activation plugins and activates mise once. It preserves legacy installations on disk for rollback. `auto_install=false` prevents opening a shell from implicitly downloading missing tools. `.nvmrc`, `.python-version` and `.sdkmanrc` support is enabled through mise's idiomatic file settings; verify project-specific selections on the target. Existing project environments are not copied.
 
@@ -65,7 +71,7 @@ The generated `.zshrc` loads these after mise activation and the source aliases:
 | `catn` | batcat with line numbers, no pager |
 | `catp` | batcat with automatic paging |
 
-Both **eza** and **bat** are installed through mise. A `batcat` function forwards to `bat` when that is the available executable name (including macOS); an existing Debian `batcat` works too. The mise-managed `bat` is preferred when both exist. Aliases are enabled only when the tool exists, so configuration-only restore still has working native commands. `command ls` and `command cat` bypass aliases for original behavior. Target local overrides are loaded afterward. These are interactive conveniences; eza/bat options differ from system ls/cat. See [eza options](https://github.com/eza-community/eza#command-line-options) and [bat documentation](https://github.com/sharkdp/bat).
+Both **eza** and **bat** are installed manually at latest stable. A `batcat` function forwards to `bat` when that is the available executable name (including macOS); an existing Debian `batcat` works too. The upstream `bat` command is preferred when both names exist. Aliases are enabled only when the tool exists, so configuration-only restore still has working native commands. `command ls` and `command cat` bypass aliases for original behavior. Target local overrides are loaded afterward. These are interactive conveniences; eza/bat options differ from system ls/cat. See [eza options](https://github.com/eza-community/eza#command-line-options) and [bat documentation](https://github.com/sharkdp/bat).
 
 ## Configuration and backup
 

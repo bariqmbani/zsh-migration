@@ -310,7 +310,7 @@ def main():
                                     'generated caches/bytecode', 'architecture-specific executables', 'development runtime installations',
                                     'terminal emulator settings', 'unrelated application credentials'],
             'development_tools': development,
-            'runtime_manager': 'mise',
+            'runtime_manager': 'mise (selected tools); manual latest exceptions in MANUAL-INSTALL.md',
             'shell_dependencies': ['zsh >=5.8', 'git', 'fzf', 'zoxide', 'jq', 'curl', 'perl'],
             'settings_not_activated': ['Windows launcher helpers', 'Proxy', 'GOPRIVATE', 'GOINSECURE', 'GIT_SSL_NO_VERIFY', 'non-allowlisted source startup logic'],
             'credential_values_redacted': len(secrets), 'snapshot_files_scanned': snapshot_count,

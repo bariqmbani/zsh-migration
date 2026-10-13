@@ -62,12 +62,43 @@ exit "${FAIL_CODE:-0}"
         self.assertEqual(raw, (stage / '.config/mise/config.toml').read_bytes())
         data = tomllib.loads(raw.decode())
         self.assertFalse(data['settings']['auto_install'])
-        for tool in ['go', 'python', 'node', 'java', 'uv', 'pnpm', 'maven', 'eza', 'bat']:
+        for tool in ['go', 'python', 'node', 'java', 'uv', 'pnpm', 'maven']:
             self.assertIn(tool, data['tools'])
         self.assertFalse({'nvm', 'pyenv', 'sdkman', 'asdf', 'corepack'} & data['tools'].keys())
         self.assertIn('.config/mise/config.toml', (PACKAGE / 'managed-paths.txt').read_text().splitlines())
         report = json.loads((PACKAGE / 'development-tools.json').read_text())
         self.assertEqual(report['tools'], data['tools'])
+
+    def test_user_policy_survives_source_rediscovery(self):
+        spec = importlib.util.spec_from_file_location('collector', KIT / 'collect-tools.py')
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        source = {'tools': {'go': '99.0.0', 'uv': '0.1.0', 'ruff': '0.1.0', 'ty': '0.1.0',
+                            'rtk': '0.1.0', 'github:exercism/cli': '99.0.0',
+                            'npm:@github/copilot': '99.0.0', 'new-tool': '1.0.0'},
+                  'evidence': {}, 'deferred': []}
+        report = module.apply_policy(source)
+        self.assertEqual(report['tools']['go'], '1.27.1')
+        self.assertEqual(report['tools']['python'], '3.13.14')
+        self.assertEqual(report['tools']['java'], 'temurin-26.0.1')
+        for name in ['uv', 'ruff', 'ty']:
+            self.assertEqual(report['tools'][name], 'latest')
+        self.assertEqual(len(report['tools']), 17)
+        self.assertEqual(len(report['manual_tools']), 19)
+        self.assertEqual(report['manual_tools']['yq']['version'], 'latest')
+        self.assertEqual(report['manual_tools']['rtk']['version'], 'latest')
+        self.assertNotIn('rtk', report['tools'])
+        self.assertNotIn('github:exercism/cli', report['tools'])
+        self.assertNotIn('npm:@github/copilot', report['manual_tools'])
+        self.assertNotIn('new-tool', report['tools'])
+        self.assertTrue(any(x['tool'] == 'new-tool' for x in report['deferred']))
+        package_report = json.loads((PACKAGE / 'development-tools.json').read_text())
+        policy = json.loads((KIT / 'tool-policy.json').read_text())
+        self.assertEqual(package_report['tools'], policy['mise'])
+        self.assertFalse(set(package_report['tools']) & set(policy['excluded']))
+        self.assertFalse(set(package_report['manual_tools']) & set(policy['excluded']))
+        self.assertEqual((PACKAGE / 'manual-commands.txt').read_text().splitlines(),
+                         ['|'.join(x['commands']) for x in package_report['manual_tools'].values()])
 
     def test_metadata_mapping_resolves_defaults_and_vendor(self):
         spec = importlib.util.spec_from_file_location('collector', KIT / 'collect-tools.py')
